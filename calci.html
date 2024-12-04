@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Personal Carbon Footprint Calculator</title>
+    <link rel="stylesheet" href="quiz.css">
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('calc.png'); /* Replace 'your-image.jpg' with the actual image file path */
+            background-size: cover; /* Adjust to your preferred background size */
+            background-repeat: no-repeat;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7); /* Add a semi-transparent background color for readability */
+            font-size: 0.8cm;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            color: white; /* Set text color to be visible on the background */
+        }
+        /* Add more CSS styles as needed */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: white;text-decoration: underline olivedrab; text-align: center;">Personal Carbon Footprint Calculator</h1>
+        <form id="carbonCalculator">
+                <br>
+                <br>
+            <!--transport-->
+            <div class="container" style="background-color:darkgreen;"> 
+            <img src="transport.jpg" style="float: right;padding-top: 0%;width: 150px;height: 150px;">
+            <label for="distance" style="text-decoration: underline; font-size:xx-large;">Transportation:</label><br>
+            <label for="transport">Distance Travelled (kilometers):</label> 
+            <input type="number" id="distance" required><br><br>
+            <label for="transport">Mode of Transport:</label>
+            <select id="transport" required>
+                <option value="car">Car</option>
+                <option value="bus">Bus</option>
+                <option value="train">Train</option>
+                <option value="plane">Plane</option>
+                <option value="truck">Truck</option>
+                <option value="Twowheeler">Two wheeler</option>
+                <option value="Ship">Ship</option>
+                <option value="auto">Auto-rickshaw</option>
+                </select><br></div>
+                <br>
+                <br>
+
+            <!--electricity-->
+            <div class="container" style="background-color:green;">
+                <img src="elec.jpg" style="float: right; height: 130px;width: 130px;">
+                <label for="electricity" style="text-decoration: underline; font-size:xx-large;">Electricity Consumed (kWh):</label><br>
+            <input type="number" id="electricity" required><br><br></div>
+
+              <br>
+              <br>
+            <!--food-->
+            <div class="container" style="background-color:forestgreen;">
+            <label for="food" style="text-decoration: underline; font-size:xx-large;">Total meals(in a day):</label><br>
+            <img src="food.jpg" style="float: right;width: 150px;height: 150px;">
+            <label for="food">Meals:</label>
+            <select id="meal" required>
+                <option value="veg">Vegetarian</option>
+                <option value="nonveg">Non-vegetarian</option>
+                <input type="number" id="food" required><br><br>
+            <label for="food">Snacks:</label>
+            <select id="snack" required>
+                <option value="veg">Vegetarian</option>
+                <option value="nonveg">Non-vegetarian</option>
+                <input type="number" id="food" required><br><br>    
+            </select></div>
+            <br>
+            <br>
+            <!--Trees-->
+            <div class="container" style="background-color: lawngreen;">
+                <img src="tree.jpg" style="float: right;width: 150px;height: 150px;">
+                <label for="trees" style="text-decoration: underline; font-size:xx-large;">Trees planted:</label><br>
+                <input type="number" id="trees" required><br><br></div>
+                <br>
+                <br>
+            <!--calculate button-->
+            <button type="button"  class="block" onclick="calculateCarbonFootprint()" style= "font-size:large; border-radius: 5px;">Calculate</button>
+        </form>
+        <br>
+        <br>
+
+        <div id="result" style="color: white; background-color: #333; padding: 10px; border-radius: 5px; text-align: center;"></div>
+
+    </div>
+
+    <script>
+        function calculateCarbonFootprint() {
+            const distance = parseFloat(document.getElementById("distance").value);
+            const transport = document.getElementById("transport").value;
+            const electricity = parseFloat(document.getElementById("electricity").value);
+            const food = document.getElementById("food").value;
+            const meal = document.getElementById("meal").value;
+            const snack = document.getElementById("snack").value;
+            const trees = (document.getElementById("trees").value);
+            // Define emissions factors (in CO2 equivalent emissions per unit)
+            
+            const emissionFactors = {  // kg CO2e per km per day
+                car: 0.192,     
+                bus: 0.015,     
+                train: 0.037,   
+                plane: 0.246,   
+                truck:0.105,
+                Twowheeler:0.11337,
+                Ship:0.025,
+                auto:0.05
+            };
+            const electricityFactor = 0.475;  // kg CO2e per kWh
+
+            const foodfactor={   //kg CO2 per day
+                veg: 0.723,
+                nonveg: 3.85
+            };
+
+            const treesFactor = 0.068;   //kg CO2 per day
+
+            // Calculate carbon footprint
+            const transportFootprint = distance * emissionFactors[transport];
+            const electricityFootprint = (electricity/30) * electricityFactor;
+            const FoodFootprint1 =  food * foodfactor[meal];
+            const FoodFootprint2 =  food * foodfactor[snack];
+            const FoodFootprint=FoodFootprint1 + FoodFootprint2;
+            const treesFootprint = trees * treesFactor;
+            const totalFootprint = transportFootprint + electricityFootprint + FoodFootprint - treesFootprint;
+
+            // Display the result
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = `<h2 style="text-decoration:underline; font-family:Arial, sans-serif;">Your estimated carbon footprint is ${totalFootprint.toFixed(4)} kg CO2e</h2>
+            <br>
+                <h5 style:text-align:left;text-decoration:underline;>Here are few precaustion you may follow to reduce carbon emission:</h5>
+            <div style="color:green;text-align:left;">
+            <br>
+            * Turn off lights and unplug appliances when not in use
+            <br>
+            *Choose renewable energy through Energy Choice
+            <br>
+            *Bring a reusable bag
+            <br>
+            * Consider purchasing a hybrid or electric vehicle
+            <br>
+            * Eat less meat and stick with fruits, veggies, grains and beans
+            <br>
+            * Choose organic and local foods that are in season
+            <div>
+            `;
+        }
+    </script>
+</body>
+</html>

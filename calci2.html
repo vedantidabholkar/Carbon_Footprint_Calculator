@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Industrial Carbon Footprint Calculator</title>
+    <link rel="stylesheet" href="quiz.css">
+    <style>
+        /* Add your CSS styles here */
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('calc.png'); /* Replace 'your-image.jpg' with the actual image file path */
+            background-size: cover; /* Adjust to your preferred background size */
+            background-repeat: no-repeat;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7); /* Add a semi-transparent background color for readability */
+            font-size: 0.8cm;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            color: white; /* Set text color to be visible on the background */
+        }
+        /* Add more CSS styles as needed */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: white;text-decoration: underline deepskyblue; text-align: center;">Industrial Carbon Footprint Calculator</h1>
+        <form id="carbonCalculator">
+
+            <!--transport-->
+            <div class="container" style="background-color:darkgreen;"> 
+                <label for="distance" style="text-decoration: underline; font-size:xx-large;">Transportation:</label><br>
+                <img src="transport.jpg" style="float: right;padding-top: 0%;width: 150px;height: 150px;">
+                <br>
+                <label for="transport">Distance Travelled (kilometers):</label> 
+                <input type="number" id="distance" required><br><br>
+                <label for="transport">Mode of Transport:</label>
+                <select id="transport" required>
+                    <option value="car">Car</option>
+                    <option value="bus">Bus</option>
+                    <option value="train">Train</option>
+                    <option value="plane">Plane</option>
+                    <option value="truck">Truck</option>
+                    <option value="Twowheeler">Two wheeler</option>
+                    <option value="Ship">Ship</option>
+                    <option value="auto">Auto-rickshaw</option>
+                </select><br><br></div>
+                <br>
+                <br>
+            <!--electricity-->
+            <div class="container" style="background-color:green;">
+            <img src="elec.jpg" style="float: right; height: 130px;width: 130px;">
+            <label for="electricity" style="text-decoration: underline; font-size:xx-large;">Electricity Consumed (kWh):</label><br>
+            <input type="number" id="electricity" required><br><br></div>
+                <br>
+                <br>
+            <!--direct carbon emission-->
+            <div class="container" style="background-color:forestgreen;">
+            <label for="pollution" style="text-decoration: underline;font-size:xx-large;">Monthly Direct pollution:</label><br><br>
+            <label for="pollution"style="text-decoration: underline;">Types:</label><br><br>
+            <img src="pollu.png" style="float: right; height: 200px;width: 200px;">
+            <select id="types" style="height:0.6cm; width:2cm;" required>
+                <option value="solid">solid</option>
+                <option value="liquid">liquid</option>
+                <option value="gas">gas</option>
+                <input type="number" id="pollution" required><br><br>
+            <select id="types" style="height:0.6cm; width:2cm;" required>
+                <option value="solid">solid</option>
+                <option value="liquid">liquid</option>
+                <option value="gas">gas</option>
+                <input type="number" id="pollution" required><br><br>
+            <select id="types" style="height:0.6cm; width:2cm;" required>
+                    <option value="solid">solid</option>
+                    <option value="liquid">liquid</option>
+                    <option value="gas">gas</option>
+                    <input type="number" id="pollution" required><br><br>
+            </div>
+            <br>
+            <br>
+             <!--Trees-->
+             <div class="container" style="background-color: lawngreen;">
+                <img src="tree.jpg" style="float: right;width: 150px;height: 150px;">
+                <label for="trees" style="text-decoration: underline; font-size:xx-large;">Trees planted:</label><br>
+                <input type="number" id="trees" required><br><br></div>
+                <br>
+                <br>
+            <!--calculate button-->
+            <button type="button"  class="block" onclick="calculateCarbonFootprint()" style= "font-size:large; border-radius: 5px;">Calculate</button>
+        </form>
+        <br>
+        <br>
+
+        <div id="result" style="color: white; background-color: #333; padding: 10px; border-radius: 5px; text-align: center;"></div>
+
+    </div>
+
+    <script>
+        function calculateCarbonFootprint() {
+            const distance = parseFloat(document.getElementById("distance").value);
+            const transport = document.getElementById("transport").value;
+            const electricity = parseFloat(document.getElementById("electricity").value);
+            const pollution = parseFloat(document.getElementById("pollution").value);
+            const types = document.getElementById("types").value;
+            const trees = parseFloat(document.getElementById("trees").value);
+            // Define emissions factors (in CO2 equivalent emissions per unit)
+
+            const emissionFactors = {       // kg CO2e per km per month
+                car: 0.192,     
+                bus: 0.015,     
+                train: 0.037,   
+                plane: 0.246,   
+                truck:0.105,
+                Twowheeler:0.11337,
+                Ship:0.025,
+                auto:0.05
+            };
+            
+            const electricityFactor = 0.475;  // kg CO2e per kWh per month
+
+            const pollutionfactor={  //kg CO2e per month
+                solid: 0.165,
+                liquid: 0.22,
+                gas: 0.7
+            };
+
+            const treesFactor = 0.068;   //kg CO2e per month
+            
+            // Calculate carbon footprint
+            const transportFootprint = (distance * 30) * emissionFactors[transport];
+            const electricityFootprint = (electricity * 30) * electricityFactor;
+            const pollutionFootprint =  pollution * pollutionfactor[types];
+            const treesFootprint = (trees * 30) * treesFactor;
+            const totalFootprint = transportFootprint + electricityFootprint + pollutionFootprint - treesFootprint;
+
+            // Display the result
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = `Your estimated carbon footprint is ${totalFootprint.toFixed(4)} kg CO2e
+            <br>
+                <h5 style:text-align:left;text-decoration:underline;>Here are few precaustion you may follow to reduce carbon emission:</h5>
+            <div style="color:green;text-align:left;">
+            <br>
+            * Invest in renewable energy sources.
+            <br>
+            *Implement energy management systems and audits.
+            <br>
+            *Promote sustainable transportation and telecommuting.
+            <br>
+            *Adopt sustainable materials and supply chain practices.
+            <br>
+            * Reduce waste and promote recycling.
+            <br>
+            * Educate and engage employees in sustainability.
+            <br>
+            *Track and report carbon emissions.
+            <br>
+            *Ensure regulatory compliance.
+            <br>
+            *Offset carbon emissions through projects.
+            <br>
+            *Conserve water and prevent leaks.
+            <div>
+            `;
+        }
+    </script>
+</body>
+</html>
